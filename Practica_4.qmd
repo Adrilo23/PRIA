@@ -1,0 +1,121 @@
+---
+title: "PRIA práctica 4: Visualización avanzada"
+author: "Adrian Lozano"
+format: html
+editor: visual
+---
+
+# Posit Primers 1.1
+
+Posit Primers desaparece el próximo mes. Recomendación de estudio para el examen
+
+Realiza paso a paso las actividades del tutorial de posit cloud primers
+
+Acceso al tutorials posit primers 1.1
+
+Detente en la sección geometrics objects e investiga alguno de los trabajos presentes en la galería de tidyverse:
+
+
+
+Galería Tidyverse
+
+# Repaso R básico (Opcional)
+
+Realiza paso a paso las actividades del tutorial de posit cloud primers 1.2
+
+Acceso al tutorials posit primers 1.2
+
+# Radar TOP TRUMPS
+
+Basándote en la librería ggradar, realiza una función "radartt" () que reciba como argumentos: baraja y pers, siendo el primero el data frame de los top trumps de muestra y el segundo un vector de 1 a 5 elementos que serán los nombres de los data frames. La función mostrará un diagrama de radar para cada personaje sobre el mismo lienzo, con las características numéricas de los personales y su valor escalado por rango.
+
+```{r}
+# Cargamos las librerías necesarias
+library(ggradar)
+library(readr)
+
+df <- read_csv('Practica_4.csv')
+
+radartt <- function(baraja, pers) {
+  if (length(pers) > 5) {
+    print("El máximo de personajes permitido es 5. Se ignorarán los personajes adicionales.")
+    pers <- pers[1:5]  # Selecciona solo los primeros 5 personajes si se proporcionan más
+  }
+  
+  df_filtrado <- baraja[baraja$Nombre %in% pers, ]
+  
+  df_para_radar <- df_filtrado[, c("Poder", "Convivencia", "Liante", "Atractivo", "Locura")]
+  
+  # Escalamos los datos por rango para cada columna numérica
+  df_escalado <- as.data.frame(lapply(df_para_radar, function(x) (x - min(x)) / (max(x) - min(x))))
+  
+  # Añadimos la columna de nombres para identificar cada radar
+  df_escalado$Nombre <- df_filtrado$Nombre
+  
+  # Reordenamos las columnas para poner "Nombre" al principio
+  df_escalado <- df_escalado[, c("Nombre", "Poder", "Convivencia", "Liante", "Atractivo", "Locura")]
+  
+  # Creamos el gráfico de radar
+  ggradar(df_escalado, 
+          axis.labels = c("Poder", "Convivencia", "Liante", "Atractivo", "Locura"),
+          grid.min = 0, 
+          grid.mid = 0.7, 
+          grid.max = 1,
+          grid.label.size = 6,
+          legend.text.size = 10)
+}
+
+# Ejemplo de uso con más de 5 personajes
+radartt(df, c("Javi", "Vicente", "Berta", "Maite", "Patricio", "Raquel"))
+
+# Ejemplo de uso con 5 o menos personajes
+radartt(df, c("Javi", "Vicente", "Berta", "Maite", "Patricio"))
+
+```
+
+# GGIMG TOP TRUMPS
+
+Basándote en la librería ggimg, realiza una demostración con las imágenes de personajes de los dataset TOP TRUMPS. Teniendo en cuenta que son 30 personajes, no es necesario usar el dataset completo.
+
+```{r}
+library(ggplot2)
+library(ggimg)
+library(dplyr)
+
+# Supongamos que tienes un conjunto de datos con las columnas: Nombre, Poder, Convivencia, y path
+# Reemplaza "Nombre", "Poder", "Convivencia", y "path" con los nombres reales de tus columnas
+df <- read.csv('Practica_4.csv')
+
+# Función para filtrar y asignar rutas de imágenes
+imagett <- function(baraja, pers, images) {
+  nombres_personajes <- pers
+  rutas_imagenes <- images
+
+  df_filtrado <- baraja[baraja$Nombre %in% pers, ]
+
+  # Crear una nueva columna "Imagen" y asignar las rutas de las imágenes según los nombres de los personajes
+  df_filtrado <- df_filtrado %>%
+    mutate(Imagen = rutas_imagenes[match(Nombre, nombres_personajes)])
+
+  return(df_filtrado)
+}
+
+# Llamada a la función con tus datos
+df_filtrado <- imagett(df, c("Javi", "Vicente", "Berta", "Maite", "Patricio"), c("javi.jpg","vicente.jpg","berta.jpg","maite.jpg","patricio.jpg"))
+print(df_filtrado)
+
+
+# Crear el gráfico con ggplot2 y ggimg
+ggplot(df_filtrado) +
+  geom_rect_img(aes(
+    xmin = Locura - 0.5,
+    xmax = Locura + 0.5,
+    ymin = Convivencia - 0.5,
+    ymax = Convivencia + 0.5,
+    img = Imagen
+  )) +
+  theme_minimal()
+
+
+  
+```
