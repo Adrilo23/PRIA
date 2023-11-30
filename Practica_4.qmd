@@ -1,29 +1,9 @@
 ---
 title: "PRIA práctica 4: Visualización avanzada"
-author: "Adrian Lozano"
+author: "Adrian Lozano Orea"
 format: html
 editor: visual
 ---
-
-# Posit Primers 1.1
-
-Posit Primers desaparece el próximo mes. Recomendación de estudio para el examen
-
-Realiza paso a paso las actividades del tutorial de posit cloud primers
-
-Acceso al tutorials posit primers 1.1
-
-Detente en la sección geometrics objects e investiga alguno de los trabajos presentes en la galería de tidyverse:
-
-
-
-Galería Tidyverse
-
-# Repaso R básico (Opcional)
-
-Realiza paso a paso las actividades del tutorial de posit cloud primers 1.2
-
-Acceso al tutorials posit primers 1.2
 
 # Radar TOP TRUMPS
 
